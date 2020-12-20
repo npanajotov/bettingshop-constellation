@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #mapid {
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div id="mapid"></div>
+<script>
+    var mymap = L.map('mapid', {
+        center: [44.81412860847245, 20.450520675579913],
+        zoom: 13
+    });
+    var primarySchool = L.icon({
+        iconUrl: 'https://i.ibb.co/VqfmrCg/primary.png',
+        iconSize: [16, 16]
+    });
+    var highSchool = L.icon({
+        iconUrl: 'https://i.ibb.co/9NMB8dx/secondary.png',
+        iconSize: [16, 16]
+    });
+    var legitBet = L.icon({
+        iconUrl: 'https://i.ibb.co/2PhQg5H/legit-bet.png',
+        iconSize: [10, 10]
+    });
+    var nonLegitBet1 = L.icon({
+        iconUrl: 'https://i.ibb.co/C8bc2Fj/nonlegit-bet-1.png',
+        iconSize: [10, 10]
+    });
+    var nonLegitBet2 = L.icon({
+        iconUrl: 'https://i.ibb.co/Tqnym5v/nonlegit-bet-2.png',
+        iconSize: [10, 10]
+    });
+    var nonLegitBet3 = L.icon({
+        iconUrl: 'https://i.ibb.co/QkXp6pN/nonlegit-bet-3.png',
+        iconSize: [10, 10]
+    });
+    var nonLegitBet4 = L.icon({
+        iconUrl: 'https://i.ibb.co/sjZ9zr2/nonlegit-bet-4.png',
+        iconSize: [10, 10]
+    });
+
+    const schools = fetch('./json/schools.json').then(response => {
+        return response.json();
+    }).then(data => {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].type === 1) {
+                L.marker([data[i].latitude, data[i].longitude], {icon: primarySchool}).addTo(mymap);
+            } else {
+                L.marker([data[i].latitude, data[i].longitude], {icon: highSchool}).addTo(mymap);
+            }
+        }
+    });
+
+    const legitBets = fetch('./json/legitBets.json').then(response => {
+        return response.json();
+    }).then(data => {
+        for (let i = 0; i < data.length; i++) {
+            L.marker([data[i].latitude, data[i].longitude], {icon: legitBet}).addTo(mymap);
+        }
+    });
+    const nonLegitBets = fetch('./json/nonLegitBets.json').then(response => {
+        return response.json();
+    }).then(data => {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].pivot.distance < 100) {
+                drawLine(data, i, '#FF0000', nonLegitBet1)
+            } else if (data[i].pivot.distance > 100 && data[i].pivot.distance < 200) {
+                drawLine(data, i, '#FF8A00', nonLegitBet2)
+            } else if (data[i].pivot.distance > 200 && data[i].pivot.distance < 300) {
+                drawLine(data, i, '#FFCF55', nonLegitBet3)
+            } else if (data[i].pivot.distance > 300 && data[i].pivot.distance < 400) {
+                drawLine(data, i, '#FCFF52', nonLegitBet4)
+            }
+        }
+    });
+
+    function drawLine(data, index, color, icon) {
+        L.marker([data[index].latitude, data[index].longitude], {icon: icon}).addTo(mymap);
+
+        for (let j = 0; j < data[index].schools.length; j++) {
+            var pointA = new L.LatLng(data[index].latitude, data[index].longitude);
+            var pointB = new L.LatLng(data[index].schools[j].latitude, data[index].schools[j].longitude);
+            var pointList = [pointA, pointB];
+
+            var firstpolyline = new L.Polyline(pointList, {
+                color: color,
+                weight: 1,
+                smoothFactor: 1
+            });
+            firstpolyline.addTo(mymap);
+        }
+    }
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+    }).addTo(mymap);
+</script>
+</body>
+</html>
