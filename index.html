@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Betshop</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
@@ -19,11 +19,26 @@
         }
 
         #mapid {
+            min-height: 600px;
             height: 100vh;
+            z-index: 1;
+        }
+
+        .legend {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            z-index: 99;
+        }
+        .legend img{
+            max-width:1000px;
         }
     </style>
 </head>
 <body>
+<div class="legend">
+    <img src="./assets/legend.png" alt="">
+</div>
 <div id="mapid"></div>
 <script>
     var mymap = L.map('mapid', {
@@ -90,7 +105,7 @@
                 drawLine(data, i, '#FF4F4F', nonLegitBet2, 1, 'none')
             } else if (data[i].pivot.distance > 150 && data[i].pivot.distance < 250) {
                 drawLine(data, i, '#FFA4A4', nonLegitBet1, 0.5, "8, 3")
-            } 
+            }
         }
     });
 
@@ -107,7 +122,7 @@
                 opacity: opacity,
                 weight: 1,
                 smoothFactor: 1,
-                dashArray: dashArray, 
+                dashArray: dashArray,
             });
             firstpolyline.addTo(mymap);
         }
