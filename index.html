@@ -83,13 +83,13 @@
     }).then(data => {
         for (let i = 0; i < data.length; i++) {
             if (data[i].pivot.distance < 50) {
-                drawLine(data, i, '#FF0000', nonLegitBet4, 1, 'none')
+                drawLine(data, i, '#A60000', nonLegitBet4, 1, 'none')
             } else if (data[i].pivot.distance > 50 && data[i].pivot.distance < 100) {
-                drawLine(data, i, '#FF5959', nonLegitBet3, 1, "none")
-            } else if (data[i].pivot.distance > 100 && data[i].pivot.distance < 200) {
-                drawLine(data, i, '#FF8888', nonLegitBet2, 1, 'none')
-            } else if (data[i].pivot.distance > 200 && data[i].pivot.distance < 250) {
-                drawLine(data, i, '#ffffff', nonLegitBet1, 0.5, "8, 3")
+                drawLine(data, i, '#FF3131', nonLegitBet3, 1, "none")
+            } else if (data[i].pivot.distance > 100 && data[i].pivot.distance < 150) {
+                drawLine(data, i, '#FF4F4F', nonLegitBet2, 1, 'none')
+            } else if (data[i].pivot.distance > 150 && data[i].pivot.distance < 250) {
+                drawLine(data, i, '#FFA4A4', nonLegitBet1, 0.5, "8, 3")
             } 
         }
     });
