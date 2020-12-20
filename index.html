@@ -31,31 +31,31 @@
         zoom: 13
     });
     var primarySchool = L.icon({
-        iconUrl: 'https://i.ibb.co/VqfmrCg/primary.png',
-        iconSize: [16, 16]
+        iconUrl: './assets/primary.svg',
+        iconSize: [18, 18]
     });
     var highSchool = L.icon({
-        iconUrl: 'https://i.ibb.co/9NMB8dx/secondary.png',
-        iconSize: [16, 16]
+        iconUrl: './assets/secondary.svg',
+        iconSize: [18, 18]
     });
     var legitBet = L.icon({
-        iconUrl: 'https://i.ibb.co/2PhQg5H/legit-bet.png',
+        iconUrl: './assets/legit-bet.svg',
         iconSize: [10, 10]
     });
     var nonLegitBet1 = L.icon({
-        iconUrl: 'https://i.ibb.co/C8bc2Fj/nonlegit-bet-1.png',
+        iconUrl: './assets/nonlegit-bet-1.svg',
         iconSize: [10, 10]
     });
     var nonLegitBet2 = L.icon({
-        iconUrl: 'https://i.ibb.co/Tqnym5v/nonlegit-bet-2.png',
+        iconUrl: './assets/nonlegit-bet-2.svg',
         iconSize: [10, 10]
     });
     var nonLegitBet3 = L.icon({
-        iconUrl: 'https://i.ibb.co/QkXp6pN/nonlegit-bet-3.png',
+        iconUrl: './assets/nonlegit-bet-3.svg',
         iconSize: [10, 10]
     });
     var nonLegitBet4 = L.icon({
-        iconUrl: 'https://i.ibb.co/sjZ9zr2/nonlegit-bet-4.png',
+        iconUrl: './assets/nonlegit-bet-4.svg',
         iconSize: [10, 10]
     });
 
@@ -82,19 +82,19 @@
         return response.json();
     }).then(data => {
         for (let i = 0; i < data.length; i++) {
-            if (data[i].pivot.distance < 100) {
-                drawLine(data, i, '#FF0000', nonLegitBet1)
+            if (data[i].pivot.distance < 50) {
+                drawLine(data, i, '#FF0000', nonLegitBet4, 1, 'none')
+            } else if (data[i].pivot.distance > 50 && data[i].pivot.distance < 100) {
+                drawLine(data, i, '#FF5959', nonLegitBet3, 1, "none")
             } else if (data[i].pivot.distance > 100 && data[i].pivot.distance < 200) {
-                drawLine(data, i, '#FF8A00', nonLegitBet2)
-            } else if (data[i].pivot.distance > 200 && data[i].pivot.distance < 300) {
-                drawLine(data, i, '#FFCF55', nonLegitBet3)
-            } else if (data[i].pivot.distance > 300 && data[i].pivot.distance < 400) {
-                drawLine(data, i, '#FCFF52', nonLegitBet4)
-            }
+                drawLine(data, i, '#FF8888', nonLegitBet2, 1, 'none')
+            } else if (data[i].pivot.distance > 200 && data[i].pivot.distance < 250) {
+                drawLine(data, i, '#ffffff', nonLegitBet1, 0.5, "8, 3")
+            } 
         }
     });
 
-    function drawLine(data, index, color, icon) {
+    function drawLine(data, index, color, icon, opacity, dashArray) {
         L.marker([data[index].latitude, data[index].longitude], {icon: icon}).addTo(mymap);
 
         for (let j = 0; j < data[index].schools.length; j++) {
@@ -104,8 +104,10 @@
 
             var firstpolyline = new L.Polyline(pointList, {
                 color: color,
+                opacity: opacity,
                 weight: 1,
-                smoothFactor: 1
+                smoothFactor: 1,
+                dashArray: dashArray, 
             });
             firstpolyline.addTo(mymap);
         }
